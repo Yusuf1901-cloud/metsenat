@@ -3,7 +3,7 @@ from django.utils import timezone
 
 ENTITY_TYPE = [
     ('PHY', 'PHYSICAL ENTITY'),
-    ('LEG', 'LEGAL ENTITY')
+    ('LEG', 'LEGAL ENTITY'),
 ]
 
 
@@ -27,7 +27,7 @@ class Application(models.Model):
         ordering = ['-created']
 
     def __str__(self):
-        self.fio
+        return self.fio
 
 
 class University(models.Model):
@@ -45,5 +45,25 @@ class Student(models.Model):
         Doctor = "DK", 'Doctor'
 
     fio = models.CharField(max_length=250)
+    phone_num = models.CharField(max_length=13)
     otm = models.ForeignKey(University, on_delete=models.CASCADE)
+    type = models.CharField(max_length=2, choices=StudyType.choices, default=StudyType.BACHELOR)
+    cont_amount = models.IntegerField()
 
+    class Meta:
+        ordering = ['-cont_amount']
+
+    def __str__(self):
+        return self.fio
+
+
+class SponsorShip(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='sponsorship')
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name='sponsorship')
+    dist_amount = models.IntegerField()
+
+    class Meta:
+        ordering = ['-dist_amount']
+
+    def __str__(self):
+        return f"{self.id} \'id\' li donate"

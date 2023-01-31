@@ -1,12 +1,60 @@
-from django.shortcuts import render
-from .models import Application
-from rest_framework.generics import ListCreateAPIView
-from .serializers import ApplicationSerializer
-from rest_framework.parsers import JSONParser
+from . import models
+from rest_framework import generics, views
+from . import serializers
 from rest_framework import permissions
+from django_filters.rest_framework import DjangoFilterBackend
 
 
-class ApplicationListCreateView(ListCreateAPIView):
+class ApplicationCreateView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = Application.objects.all()
-    serializer_class = ApplicationSerializer
+    queryset = models.Application.objects.all()
+    serializer_class = serializers.ApplicationSerializer
+
+
+class ApplicationListView(generics.ListAPIView):
+    queryset = models.Application.objects.all()
+    serializer_class = serializers.ApplicationListSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status', 'donate_amount', 'created']
+
+
+class ApplicationDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Application.objects.all()
+    serializer_class = serializers.ApplicationSerializer
+
+
+class UniversityListCreateAPIView(generics.ListCreateAPIView):
+    queryset = models.University.objects.all()
+    serializer_class = serializers.UniversitySerializer
+
+
+class StudentCreateAPIView(generics.CreateAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentSerializer
+
+
+class StudentListAPIView(generics.ListAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentListSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['type', 'otm']
+
+
+class StudentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentSerializer
+
+
+class StudentBenefactorsListAPIView(generics.ListAPIView):
+    queryset = models.SponsorShip.objects.all()
+    serializer_class = serializers.SponsorShipSerializer
+
+    def get_queryset(self):
+        stu_id = self.kwargs.get('pk')
+        qs = models.SponsorShip.objects.filter(student_id=stu_id)
+        return qs
+
+
+class SponsorShipListCreateAPIView(generics.ListCreateAPIView):
+    queryset = models.SponsorShip.objects.all()
+    serializer_class = serializers.SponsorShipSerializer
