@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, University, Student, SponsorShip
+from .models import Application, University, Student, SponsorShip, Dashboard
 
 
 @admin.register(Application)
@@ -18,3 +18,5 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 admin.site.register(University)
 admin.site.register(SponsorShip)
+admin.site.register(Dashboard)
+

@@ -2,7 +2,6 @@ from rest_framework import serializers
 from . import models
 from rest_framework import exceptions
 from django.db.models import Sum
-from rest_framework import response
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
@@ -81,8 +80,7 @@ class SponsorShipSerializer(serializers.ModelSerializer):
 
         student_all_dist_amount = models.SponsorShip.objects.filter(student=stu).aggregate(Sum('dist_amount'))\
                                                                                 .get('dist_amount__sum', 0)
-        sponsor_all_donate_amount = models.SponsorShip.objects.filter(application=app).aggregate(Sum('dist_amount'))\
-                                                                                      .get('dist_amount__sum', 0)
+        sponsor_all_donate_amount = models.SponsorShip.objects.filter(application=app).aggregate(Sum('dist_amount'))['dist_amount__sum']
 
         print(student_all_dist_amount)
         if dist_amount + sponsor_all_donate_amount <= app_amount:
@@ -96,3 +94,28 @@ class SponsorShipSerializer(serializers.ModelSerializer):
             raise exceptions.ValidationError(f"You cannot donate {dist_amount} because ==> "
                                              f"This benefactor has {app_amount},  "
                                              f"thus you are donating {dist_amount}!!")
+
+
+class SponsorsFIOSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Application
+        fields = ['fio']
+
+
+class StudentsSponsorListSerializer(serializers.ModelSerializer):
+    benefactors_fio = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.SponsorShip
+        fields = ['id', 'student', 'benefactors_fio', 'dist_amount']
+
+    def get_benefactors_fio(self, obj):
+        sponsors = models.Application.objects.filter(sponsorship=obj)
+        return SponsorsFIOSerializer(sponsors, many=True).data
+
+
+class DashboardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Dashboard
+        fields = ['asked_amount', 'required_amount', 'paid_amount']

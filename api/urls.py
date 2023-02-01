@@ -9,6 +9,10 @@ urlpatterns = [
     path('students/create/', views.StudentCreateAPIView.as_view(), name='student-create'),
     path('students/list/', views.StudentListAPIView.as_view(), name='student-list'),
     path('students/<int:pk>/', views.StudentDetailAPIView.as_view(), name='student-detail'),
-    path('students/<int:pk>/benefactors/', views.StudentBenefactorsListAPIView.as_view(), name='student-benefactors'),
+    path('students/<int:pk>/benefactors/', views.StudentBenefactorsListAPIView.as_view(),
+         name='student-benefactors-list'),
+    path('students/<int:pk>/benefactors/<int:lk>/', views.StudentBenefactorsDetailAPIView.as_view(),
+         name='student-benefactors-detail'),
     path('donate/', views.SponsorShipListCreateAPIView.as_view(), name='donate-list-create'),
+    path('dashboard/', views.DashboardAPIView.as_view(), name='dashboard'),
 ]

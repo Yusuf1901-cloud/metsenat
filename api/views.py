@@ -47,7 +47,7 @@ class StudentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class StudentBenefactorsListAPIView(generics.ListAPIView):
     queryset = models.SponsorShip.objects.all()
-    serializer_class = serializers.SponsorShipSerializer
+    serializer_class = serializers.StudentsSponsorListSerializer
 
     def get_queryset(self):
         stu_id = self.kwargs.get('pk')
@@ -55,6 +55,26 @@ class StudentBenefactorsListAPIView(generics.ListAPIView):
         return qs
 
 
+class StudentBenefactorsDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.SponsorShip.objects.all()
+    serializer_class = serializers.StudentsSponsorListSerializer
+
+    def get_queryset(self):
+        stu_id = self.kwargs.get('pk')
+        stu_benefactor_id = self.kwargs.get('lk')
+        qs = models.SponsorShip.objects.filter(student_id=stu_id, application_id=stu_benefactor_id).first()
+        return qs
+
+
 class SponsorShipListCreateAPIView(generics.ListCreateAPIView):
     queryset = models.SponsorShip.objects.all()
     serializer_class = serializers.SponsorShipSerializer
+
+
+class DashboardAPIView(generics.ListAPIView):
+    queryset = models.Dashboard.objects.all()
+    serializer_class = serializers.DashboardSerializer
+
+    # def get_queryset(self):
+    #     year = self.request.query_params.get('year', 2022)
+    #     qs = models.Student.objects.all().annotate()

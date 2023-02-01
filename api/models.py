@@ -67,3 +67,12 @@ class SponsorShip(models.Model):
 
     def __str__(self):
         return f"{self.id} \'id\' li donate"
+
+
+class Dashboard(models.Model):
+    paid_amount = models.IntegerField()
+    required_amount = models.IntegerField()
+    asked_amount = models.IntegerField()
+
+    def __str__(self):
+        return f""
