@@ -56,13 +56,16 @@ class StudentBenefactorsListAPIView(generics.ListAPIView):
 
 
 class StudentDonatesDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    # queryset = models.SponsorShip.objects.all()
     serializer_class = serializers.SponsorShipSerializer
 
     def get_queryset(self):
         stu_id = self.kwargs.get('stu_id')
         qs = models.SponsorShip.objects.filter(student_id=stu_id)
         return qs
+    #
+    # def perform_update(self, serializer):
+    #     print(serializer.validated_data.get('dist_amount'))
+    #     serializer.save()
 
 
 class SponsorShipListCreateAPIView(generics.ListCreateAPIView):
