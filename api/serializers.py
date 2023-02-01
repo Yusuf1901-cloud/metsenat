@@ -80,7 +80,8 @@ class SponsorShipSerializer(serializers.ModelSerializer):
 
         student_all_dist_amount = models.SponsorShip.objects.filter(student=stu).aggregate(Sum('dist_amount'))\
                                                                                 .get('dist_amount__sum', 0)
-        sponsor_all_donate_amount = models.SponsorShip.objects.filter(application=app).aggregate(Sum('dist_amount'))['dist_amount__sum']
+        sponsor_all_donate_amount = models.SponsorShip.objects.filter(application=app).aggregate(Sum('dist_amount'))\
+                                                                                 .get('dist_amount__sum')
 
         print(student_all_dist_amount)
         if dist_amount + sponsor_all_donate_amount <= app_amount:
