@@ -55,14 +55,13 @@ class StudentBenefactorsListAPIView(generics.ListAPIView):
         return qs
 
 
-class StudentBenefactorsDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.SponsorShip.objects.all()
-    serializer_class = serializers.StudentsSponsorListSerializer
+class StudentDonatesDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    # queryset = models.SponsorShip.objects.all()
+    serializer_class = serializers.SponsorShipSerializer
 
     def get_queryset(self):
-        stu_id = self.kwargs.get('pk')
-        stu_benefactor_id = self.kwargs.get('lk')
-        qs = models.SponsorShip.objects.filter(student_id=stu_id, application_id=stu_benefactor_id).first()
+        stu_id = self.kwargs.get('stu_id')
+        qs = models.SponsorShip.objects.filter(student_id=stu_id)
         return qs
 
 

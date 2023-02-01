@@ -71,30 +71,31 @@ class SponsorShipSerializer(serializers.ModelSerializer):
         model = models.SponsorShip
         fields = ['id', 'student', 'application', 'dist_amount']
 
-    def create(self, validated_data):
-        dist_amount = validated_data.get('dist_amount')
-        stu = validated_data.get('student')
-        app = validated_data.get('application')
-        stu_cont_amount = validated_data.get('student').cont_amount
-        app_amount = validated_data.get('application').donate_amount
-
-        student_all_dist_amount = models.SponsorShip.objects.filter(student=stu).aggregate(Sum('dist_amount'))\
-                                                                                .get('dist_amount__sum', 0)
-        sponsor_all_donate_amount = models.SponsorShip.objects.filter(application=app).aggregate(Sum('dist_amount'))\
-                                                                                 .get('dist_amount__sum')
-
-        print(student_all_dist_amount)
-        if dist_amount + sponsor_all_donate_amount <= app_amount:
-            if stu_cont_amount >= student_all_dist_amount + dist_amount:
-                return super().create(validated_data)
-            else:
-                raise exceptions.ValidationError(f"This student's cont_amount is less than all ==> "
-                                                 f"{student_all_dist_amount} distributed_amount and "
-                                                 f"you have donated {dist_amount} this time")
-        else:
-            raise exceptions.ValidationError(f"You cannot donate {dist_amount} because ==> "
-                                             f"This benefactor has {app_amount},  "
-                                             f"thus you are donating {dist_amount}!!")
+    # def create(self, validated_data):
+        # dist_amount = validated_data.get('dist_amount')
+        # stu = validated_data.get('student')
+        # app = validated_data.get('application')
+        # stu_cont_amount = validated_data.get('student').cont_amount
+        # app_amount = validated_data.get('application').donate_amount
+        #
+        # student_all_dist_amount = models.SponsorShip.objects.filter(student=stu).aggregate(Sum('dist_amount'))\
+        #                                                                         .get('dist_amount__sum', 0)
+        # sponsor_all_taken_amount = models.Application.objects.filter(id=app.id).aggregate(Sum('sponsorship__dist_amount'))\
+        #                                                                         .get('sponsorship__dist_amount__sum', 0)
+        # print(sponsor_all_taken_amount)
+        # return super().create(*validated_data)
+        # if dist_amount + sponsor_all_taken_amount <= app_amount:
+        #     if stu_cont_amount >= student_all_dist_amount + dist_amount:
+        #         return super().create(validated_data)
+        #     else:
+        #         raise exceptions.ValidationError(f"This student's cont_amount is less than all ==> "
+        #                                          f"{student_all_dist_amount} distributed_amount and "
+        #                                          f"you have donated {dist_amount} this time")
+        # else:
+        #     raise exceptions.ValidationError(f"You cannot donate {dist_amount} because ==> "
+        #                                      f"This benefactor has {app_amount},  "
+        #                                      f"thus you are donating {dist_amount}!!")
+        #
 
 
 class SponsorsFIOSerializer(serializers.ModelSerializer):
