@@ -120,7 +120,15 @@ class StudentsSponsorListSerializer(serializers.ModelSerializer):
 
 
 class DashboardSerializer(serializers.ModelSerializer):
+    app_count_monthly = serializers.SerializerMethodField()
+    stu_count_monthly = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Dashboard
-        fields = ['asked_amount', 'required_amount', 'paid_amount']
+        fields = ['asked_amount', 'required_amount', 'paid_amount', 'stu_count_monthly', 'app_count_monthly']
+
+    def get_app_count_monthly(self):
+        return models.Application.objects.all().count().values()
+
+    def get_stu_count_monthly(self):
+        return models.Student.objects.all().count().values()
