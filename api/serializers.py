@@ -7,7 +7,7 @@ from django.db.models.functions import TruncMonth
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Application
-        fields = ['id', 'fio', 'phone_num', 'donate_amount', 'entity_type', 'firm_name', 'status']
+        fields = ['id', 'fio', 'phone_num', 'donate_amount', 'entity_type', 'firm_name']
 
     def create(self, validated_data):
         print(validated_data)
@@ -23,6 +23,12 @@ class ApplicationSerializer(serializers.ModelSerializer):
                                              f'which you have entered {firm} !!!')
 
         return super().create(validated_data)
+
+
+class ApplicationDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Application
+        fields = ['id', 'fio', 'phone_num', 'donate_amount', 'entity_type', 'firm_name', 'status']
 
 
 class UniversitySerializer(serializers.ModelSerializer):

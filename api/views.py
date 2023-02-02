@@ -20,7 +20,7 @@ class ApplicationListView(generics.ListAPIView):
 
 class ApplicationDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Application.objects.all()
-    serializer_class = serializers.ApplicationSerializer
+    serializer_class = serializers.ApplicationDetailSerializer
 
 
 class UniversityListCreateAPIView(generics.ListCreateAPIView):
