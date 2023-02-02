@@ -48,6 +48,7 @@ class Student(models.Model):
     phone_num = models.CharField(max_length=13)
     otm = models.ForeignKey(University, on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=StudyType.choices, default=StudyType.BACHELOR)
+    created = models.DateTimeField(auto_now_add=True)
     cont_amount = models.IntegerField()
 
     class Meta:

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from . import models
 from rest_framework import exceptions
-from django.db.models import Sum
-
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncMonth
 
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -127,8 +127,10 @@ class DashboardSerializer(serializers.ModelSerializer):
         model = models.Dashboard
         fields = ['asked_amount', 'required_amount', 'paid_amount', 'stu_count_monthly', 'app_count_monthly']
 
-    def get_app_count_monthly(self):
-        return models.Application.objects.all().count().values()
+    def get_app_count_monthly(self, obj):
+        return models.Application.objects.all().annotate(mon=TruncMonth('created')).values('created__month')\
+            .annotate(count=Count('id'))
 
-    def get_stu_count_monthly(self):
-        return models.Student.objects.all().count().values()
+    def get_stu_count_monthly(self, obj):
+        return models.Student.objects.all().annotate(mon=TruncMonth('created')).values('created__month')\
+            .annotate(count=Count('id'))
